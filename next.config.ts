@@ -2,7 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "export",
-  distDir: "out",
   basePath: "/Hyrlance.space",
   images: {
     unoptimized: true,

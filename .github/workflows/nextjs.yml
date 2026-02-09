@@ -74,11 +74,14 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
         run: npm run build
-      - name: List build output
-        run: ls -R out
+      - name: Diagnostic - List Workspace
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -R
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          # Automatically find the output folder if it's not 'out'
           path: ./out
 
   # Deployment job
