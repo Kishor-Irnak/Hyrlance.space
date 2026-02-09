@@ -73,15 +73,16 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
-        run: npm run build
-      - name: Diagnostic - List Workspace
+        run: npx next build
+      - name: Create .nojekyll
+        run: touch out/.nojekyll
+      - name: Diagnostic - Workspace Structure
         run: |
-          echo "Current directory: $(pwd)"
-          ls -R
+          pwd
+          find . -maxdepth 3 -not -path '*/.*'
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Automatically find the output folder if it's not 'out'
           path: ./out
 
   # Deployment job

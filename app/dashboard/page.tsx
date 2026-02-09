@@ -16,18 +16,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { promises as fs } from "fs";
 import { SlidersHorizontal } from "lucide-react";
-import path from "path";
+import jobsData from "./data.json";
 
-async function getData() {
-  const filePath = path.join(process.cwd(), "app/dashboard/data.json");
-  const fileContents = await fs.readFile(filePath, "utf8");
-  return JSON.parse(fileContents);
-}
-
-export default async function Page() {
-  const jobs = await getData();
+export default function Page() {
+  const jobs = jobsData;
 
   return (
     <SidebarProvider>
