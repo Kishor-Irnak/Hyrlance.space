@@ -74,12 +74,28 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
         run: npx next build
-      - name: Create .nojekyll
-        run: touch out/.nojekyll
-      - name: Diagnostic - Workspace Structure
+      - name: Locate and Prepare Output
         run: |
-          pwd
-          find . -maxdepth 3 -not -path '*/.*'
+          if [ -d "out" ]; then
+            echo "Standard 'out' directory found."
+          else
+            echo "'out' directory not found. Searching for build output..."
+            # Look for index.html as a marker of the export
+            EXPORT_DIR=$(find . -name "index.html" -not -path "*/node_modules/*" -exec dirname {} \; | head -n 1)
+            if [ -n "$EXPORT_DIR" ]; then
+              echo "Found build output in: $EXPORT_DIR"
+              # If it's not already named 'out', link or move it
+              if [ "$EXPORT_DIR" != "./out" ] && [ "$EXPORT_DIR" != "out" ]; then
+                mkdir -p out
+                cp -r $EXPORT_DIR/* out/
+              fi
+            else
+              echo "Could not find index.html. Checking .next directory..."
+              ls -R .next || echo ".next not found"
+              exit 1
+            fi
+          fi
+          touch out/.nojekyll
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
