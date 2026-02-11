@@ -8,18 +8,24 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const basePath = process.env.BASE_PATH || "";
+
 export const metadata: Metadata = {
   title: "Hyrlance",
   description: "Modern solutions for your business",
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon.ico" },
+      { url: `${basePath}/favicon.svg`, type: "image/svg+xml" },
+      {
+        url: `${basePath}/favicon-32x32.png`,
+        sizes: "32x32",
+        type: "image/png",
+      },
+      { url: `${basePath}/favicon.ico` },
     ],
-    apple: "/apple-touch-icon.png",
+    apple: `${basePath}/apple-touch-icon.png`,
   },
-  manifest: "/site.webmanifest",
+  manifest: `${basePath}/site.webmanifest`,
 };
 
 export default function RootLayout({
