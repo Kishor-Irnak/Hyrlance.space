@@ -11,31 +11,37 @@ import {
 import { BadgeCheck, Heart, MapPin, Star, ThumbsDown } from "lucide-react";
 import Link from "next/link";
 
-interface JobProps {
-  job: {
-    id: string;
-    title: string;
-    description: string;
-    postedTime: string;
-    type: string;
-    level: string;
-    estBudget?: string;
-    estTime?: string;
-    featured?: boolean;
-    skills: string[];
-    client?: {
-      paymentVerified: boolean;
-      rating: number;
-      spent: string;
-      location: string;
-    };
-    proposals: string;
+export interface Job {
+  id: string;
+  title: string;
+  description: string;
+  postedTime: string;
+  type: string;
+  level: string;
+  estBudget?: string;
+  estTime?: string;
+  featured?: boolean;
+  skills: string[];
+  client?: {
+    paymentVerified: boolean;
+    rating: number;
+    spent: string;
+    location: string;
   };
+  proposals: string;
 }
 
-export function JobCard({ job }: JobProps) {
+interface JobProps {
+  job: Job;
+  onSelect?: (job: Job) => void;
+}
+
+export function JobCard({ job, onSelect }: JobProps) {
   return (
-    <Card className="hover:shadow-md transition-all cursor-pointer">
+    <Card
+      className="hover:shadow-md transition-all cursor-pointer"
+      onClick={onSelect ? () => onSelect(job) : undefined}
+    >
       <CardHeader className="p-3 sm:p-4 pb-2 space-y-1">
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span className="text-[10px] sm:text-xs">
@@ -46,6 +52,7 @@ export function JobCard({ job }: JobProps) {
               variant="ghost"
               size="icon"
               className="h-7 w-7 sm:h-8 sm:w-8 rounded-full hover:bg-muted text-muted-foreground"
+              onClick={(e) => e.stopPropagation()}
             >
               <ThumbsDown className="h-3 w-3 sm:h-4 sm:w-4" />
               <span className="sr-only">Not interested</span>
@@ -54,17 +61,26 @@ export function JobCard({ job }: JobProps) {
               variant="ghost"
               size="icon"
               className="h-7 w-7 sm:h-8 sm:w-8 rounded-full hover:bg-muted text-muted-foreground"
+              onClick={(e) => e.stopPropagation()}
             >
               <Heart className="h-3 w-3 sm:h-4 sm:w-4" />
               <span className="sr-only">Save job</span>
             </Button>
           </div>
         </div>
-        <Link href={`/job/${job.id}`} className="block group">
-          <h3 className="font-semibold text-base sm:text-lg group-hover:underline text-foreground decoration-primary decoration-2 underline-offset-2">
-            {job.title}
-          </h3>
-        </Link>
+        {onSelect ? (
+          <div className="block group">
+            <h3 className="font-semibold text-base sm:text-lg group-hover:underline text-foreground decoration-primary decoration-2 underline-offset-2">
+              {job.title}
+            </h3>
+          </div>
+        ) : (
+          <Link href={`/job/${job.id}`} className="block group">
+            <h3 className="font-semibold text-base sm:text-lg group-hover:underline text-foreground decoration-primary decoration-2 underline-offset-2">
+              {job.title}
+            </h3>
+          </Link>
+        )}
       </CardHeader>
       <CardContent className="p-3 sm:p-4 pt-0 space-y-3 sm:space-y-4">
         <div className="text-xs sm:text-sm text-muted-foreground flex flex-wrap gap-x-1">
@@ -80,12 +96,18 @@ export function JobCard({ job }: JobProps) {
         </div>
         <div className="text-xs sm:text-sm leading-relaxed">
           {job.description}
-          <Link
-            href={`/job/${job.id}`}
-            className="text-primary hover:underline ml-1 font-medium"
-          >
-            more
-          </Link>
+          {onSelect ? (
+            <span className="text-primary hover:underline ml-1 font-medium cursor-pointer">
+              more
+            </span>
+          ) : (
+            <Link
+              href={`/job/${job.id}`}
+              className="text-primary hover:underline ml-1 font-medium"
+            >
+              more
+            </Link>
+          )}
         </div>
         <div className="flex flex-wrap gap-1.5 sm:gap-2">
           {job.skills.map((skill) => (

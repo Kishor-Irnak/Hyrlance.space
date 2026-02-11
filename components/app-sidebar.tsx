@@ -2,17 +2,13 @@
 
 import * as React from "react";
 import {
-  AudioWaveform,
   BookOpen,
   Bot,
-  Command,
   Frame,
-  GalleryVerticalEnd,
   LayoutDashboard,
   Map,
   PieChart,
   Settings2,
-  SquareTerminal,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -29,6 +25,11 @@ import {
 import { ModeToggle } from "@/components/mode-toggle";
 
 // This is sample data.
+const HyrlanceLogo = (props: React.ComponentProps<"img">) => (
+  // eslint-disable-next-line @next/next/no-img-element
+  <img src="/android-chrome-192x192.png" alt="Hyrlance" {...props} />
+);
+
 const data = {
   user: {
     name: "shadcn",
@@ -38,17 +39,17 @@ const data = {
   teams: [
     {
       name: "Hyrlance Inc",
-      logo: GalleryVerticalEnd,
+      logo: HyrlanceLogo,
       plan: "Freelancer",
     },
     {
       name: "Hyrlance Corp",
-      logo: AudioWaveform,
+      logo: HyrlanceLogo,
       plan: "Startup",
     },
     {
       name: "Hyrlance LLC",
-      logo: Command,
+      logo: HyrlanceLogo,
       plan: "Free",
     },
   ],

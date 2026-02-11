@@ -86,7 +86,7 @@ export default function Page() {
             </div>
 
             <p className="text-sm text-muted-foreground mb-6">
-              Browse jobs that match your experience to a client's hiring
+              Browse jobs that match your experience to a client&apos;s hiring
               preferences. Ordered by most relevant.
             </p>
 
@@ -94,12 +94,12 @@ export default function Page() {
               <JobFeed jobs={jobs} />
             </TabsContent>
             <TabsContent value="most-recent">
-              <div className="border rounded-xl bg-card text-card-foreground shadow-sm overflow-hidden p-8 text-center text-muted-foreground">
+              <div className="border rounded-xl bg-card shadow-sm overflow-hidden p-8 text-center text-muted-foreground">
                 No recent jobs found.
               </div>
             </TabsContent>
             <TabsContent value="saved-jobs">
-              <div className="border rounded-xl bg-card text-card-foreground shadow-sm overflow-hidden p-8 text-center text-muted-foreground">
+              <div className="border rounded-xl bg-card shadow-sm overflow-hidden p-8 text-center text-muted-foreground">
                 No saved jobs yet.
               </div>
             </TabsContent>

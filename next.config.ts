@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const nextConfig: NextConfig = {
   output: "export",
-  basePath: "/Hyrlance.space",
-  assetPrefix: "/Hyrlance.space",
+  basePath: isProd ? "/Hyrlance.space" : "",
+  assetPrefix: isProd ? "/Hyrlance.space" : "",
   images: {
     unoptimized: true,
     remotePatterns: [

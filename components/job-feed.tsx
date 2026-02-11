@@ -1,7 +1,17 @@
 "use client";
 
-import { JobCard } from "@/components/job-card";
+import { Job, JobCard } from "@/components/job-card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerClose,
+} from "@/components/ui/drawer";
 import {
   Select,
   SelectContent,
@@ -14,27 +24,40 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  MapPin,
+  Clock,
+  Briefcase,
+  DollarSign,
+  Star,
+  BadgeCheck,
 } from "lucide-react";
 import { useState } from "react";
 
 interface JobFeedProps {
-  jobs: any[];
+  jobs: Job[];
 }
 
 export function JobFeed({ jobs }: JobFeedProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   const totalPages = Math.ceil(jobs.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentJobs = jobs.slice(startIndex, endIndex);
 
+  const handleJobClick = (job: Job) => {
+    setSelectedJob(job);
+    setIsOpen(true);
+  };
+
   return (
     <div className="space-y-4">
       <div className="grid gap-4">
         {currentJobs.map((job) => (
-          <JobCard key={job.id} job={job} />
+          <JobCard key={job.id} job={job} onSelect={handleJobClick} />
         ))}
       </div>
 
@@ -118,6 +141,133 @@ export function JobFeed({ jobs }: JobFeedProps) {
           </div>
         </div>
       </div>
+
+      <Drawer open={isOpen} onOpenChange={setIsOpen} direction="right">
+        <DrawerContent className="h-full sm:max-w-md w-full">
+          {selectedJob && (
+            <>
+              <DrawerHeader className="border-b px-6 py-4">
+                <DrawerTitle className="text-xl">
+                  {selectedJob.title}
+                </DrawerTitle>
+                <DrawerDescription className="flex items-center gap-1 mt-1">
+                  Posted {selectedJob.postedTime}
+                </DrawerDescription>
+              </DrawerHeader>
+
+              <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="space-y-1">
+                    <p className="text-muted-foreground flex items-center gap-1">
+                      <Briefcase className="h-3.5 w-3.5" /> Job Type
+                    </p>
+                    <p className="font-medium">{selectedJob.type}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-muted-foreground flex items-center gap-1">
+                      <BadgeCheck className="h-3.5 w-3.5" /> Experience Level
+                    </p>
+                    <p className="font-medium">{selectedJob.level}</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-muted-foreground flex items-center gap-1">
+                      <DollarSign className="h-3.5 w-3.5" /> Budget
+                    </p>
+                    <p className="font-medium">
+                      {selectedJob.estBudget ||
+                        selectedJob.estTime ||
+                        "Negotiable"}
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-muted-foreground flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5" /> Posted
+                    </p>
+                    <p className="font-medium">{selectedJob.postedTime}</p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="font-medium">Description</h4>
+                  <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                    {selectedJob.description}
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h4 className="font-medium">Skills</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedJob.skills.map((skill) => (
+                      <Badge
+                        key={skill}
+                        variant="secondary"
+                        className="font-normal"
+                      >
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {selectedJob.client && (
+                  <div className="space-y-3 pt-4 border-t">
+                    <h4 className="font-medium text-sm text-muted-foreground mb-3">
+                      About the Client
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      {selectedJob.client.paymentVerified && (
+                        <div className="flex items-center gap-2">
+                          <BadgeCheck className="h-4 w-4 text-blue-500 fill-blue-100" />
+                          <span>Payment Method Verified</span>
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-2">
+                        <div className="flex">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`h-3.5 w-3.5 ${
+                                i < Math.floor(selectedJob.client!.rating)
+                                  ? "fill-primary text-primary"
+                                  : "text-muted"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="font-medium">
+                          {selectedJob.client.rating} stars
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <DollarSign className="h-4 w-4 text-muted-foreground" />
+                        <span>{selectedJob.client.spent} spent</span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                        <span>{selectedJob.client.location}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <DrawerFooter className="border-t px-6 py-4">
+                <Button size="lg" className="w-full">
+                  Apply Now
+                </Button>
+                <DrawerClose asChild>
+                  <Button variant="outline" className="w-full">
+                    Close
+                  </Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </>
+          )}
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }
