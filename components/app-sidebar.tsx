@@ -27,7 +27,11 @@ import { ModeToggle } from "@/components/mode-toggle";
 // This is sample data.
 const HyrlanceLogo = (props: React.ComponentProps<"img">) => (
   // eslint-disable-next-line @next/next/no-img-element
-  <img src="/android-chrome-192x192.png" alt="Hyrlance" {...props} />
+  <img
+    src={`${process.env.BASE_PATH || ""}/android-chrome-192x192.png`}
+    alt="Hyrlance"
+    {...props}
+  />
 );
 
 const data = {

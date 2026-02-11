@@ -4,8 +4,8 @@ const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig: NextConfig = {
   output: "export",
-  basePath: isProd ? "/Hyrlance.space" : "",
-  assetPrefix: isProd ? "/Hyrlance.space" : "",
+  basePath: "",
+  trailingSlash: true,
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -18,6 +18,9 @@ const nextConfig: NextConfig = {
         hostname: "github.com",
       },
     ],
+  },
+  env: {
+    BASE_PATH: "",
   },
 };
 
