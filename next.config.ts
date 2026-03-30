@@ -4,7 +4,7 @@ const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig: NextConfig = {
   output: "export",
-  basePath: isProd ? "/Hyrlance.space" : "",
+  basePath: isProd ? "/" : "",
   trailingSlash: true,
   images: {
     unoptimized: true,
@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
     ],
   },
   env: {
-    BASE_PATH: isProd ? "/Hyrlance.space" : "",
+    BASE_PATH: isProd ? "/" : "",
   },
 };
 
